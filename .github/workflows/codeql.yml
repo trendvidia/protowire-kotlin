@@ -1,0 +1,53 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 TrendVidia, LLC.
+
+name: CodeQL
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "37 6 * * 1"
+
+permissions:
+  contents: read
+  security-events: write
+
+env:
+  PROTOWIRE_JAVA_REF: v0.70.0
+
+jobs:
+  analyze:
+    name: Analyze (java-kotlin)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          path: protowire-kotlin
+
+      - name: Checkout protowire-java
+        uses: actions/checkout@v6
+        with:
+          repository: trendvidia/protowire-java
+          ref: ${{ env.PROTOWIRE_JAVA_REF }}
+          path: protowire-java
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - uses: github/codeql-action/init@v4
+        with:
+          languages: java-kotlin
+          queries: security-and-quality
+
+      - name: ./gradlew assemble
+        working-directory: protowire-kotlin
+        run: ./gradlew --no-daemon assemble
+
+      - uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:java-kotlin"

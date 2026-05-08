@@ -1,0 +1,18 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 TrendVidia, LLC.
+#
+# Code ownership for protowire-kotlin.
+
+*                              @trendvidia/maintainers
+
+# --- Kotlin source ------------------------------------------------------
+/src/main/kotlin/               @trendvidia/maintainers
+
+# --- Tests (open to broader reviewer pool) ------------------------------
+/src/test/kotlin/               @trendvidia/contributors @trendvidia/maintainers
+
+# --- Build, packaging, CI -----------------------------------------------
+/.github/                       @trendvidia/maintainers
+/build.gradle.kts               @trendvidia/maintainers
+/settings.gradle.kts            @trendvidia/maintainers
+/gradle/                        @trendvidia/maintainers

@@ -9,7 +9,7 @@ plugins {
     // vanniktech 0.36.0 requires Kotlin plugin >= 2.2.0; pin to a
     // current stable release. Drop-in compatible with the existing
     // sources (no language-mode 2 features used).
-    kotlin("jvm") version "2.2.0"
+    kotlin("jvm") version "2.3.21"
     `java-library`
     id("com.vanniktech.maven.publish") version "0.36.0"
 }
@@ -43,13 +43,13 @@ dependencies {
     api("org.protowire:envelope:0.70.0")
 
     // Coroutines for the suspend wrappers + Flow extensions.
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 
     testImplementation(platform("org.junit:junit-bom:5.10.3"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-junit5"))
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 

@@ -15,7 +15,7 @@ plugins {
 }
 
 group = "org.protowire"
-version = "0.70.0"
+version = "1.0.0"
 
 repositories {
     mavenCentral()

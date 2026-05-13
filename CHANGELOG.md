@@ -11,6 +11,34 @@ format changes.
 
 ## [Unreleased]
 
+## [1.0.0] — 2026-05-13
+
+First major-version cut. Lockstep with the protowire v1.0 spec
+freeze line (STABILITY.md in the spec repo) and the underlying
+`protowire-java` v1.0.1 (which carries the three v1.0 spec changes
+plus the v1.0.0 javadoc fix).
+
+### No Kotlin source changes
+
+The Kotlin companion exposes a deliberately narrow surface over
+`org.protowire.pxf` — `Pxf` (unmarshal entry points) and `Result`
+(field presence). The v1.0 rename hit Java types
+(`TableDirective` → `DatasetDirective`, `Result.tables()` →
+`Result.datasets()`, etc.) that this companion never re-exported,
+so the Kotlin API surface is unchanged.
+
+Consumers who reach through the companion to Java types directly
+need to follow the Java rename; the `FieldPresence` wrapper exposed
+here is unaffected.
+
+### Build
+
+- Gradle version `0.70.0` → `1.0.0`.
+- The composite-build dependency on `../protowire-java` continues
+  to resolve at the sibling repo's checked-out commit (now v1.0.1);
+  for published artifacts the Maven coordinate is
+  `org.protowire:protowire-kotlin:1.0.0`.
+
 ## [0.70.0]
 
 Initial public release. The version number aligns this artifact with

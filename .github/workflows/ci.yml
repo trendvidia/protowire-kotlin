@@ -30,7 +30,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           path: protowire-kotlin
 
@@ -38,7 +38,7 @@ jobs:
       # ../protowire-java relative to the kotlin repo's root, so we
       # need both repos checked out as siblings under the workspace.
       - name: Checkout protowire-java
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: trendvidia/protowire-java
           ref: ${{ env.PROTOWIRE_JAVA_REF }}

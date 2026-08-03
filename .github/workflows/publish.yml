@@ -53,7 +53,7 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - uses: gradle/actions/setup-gradle@v6
+      - uses: gradle/actions/setup-gradle@v6.2.0
 
       # Only meaningful for tag-push triggers — workflow_dispatch
       # publishes whatever version is currently in build.gradle.kts.

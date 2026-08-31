@@ -34,7 +34,7 @@ jobs:
           ref: ${{ env.PROTOWIRE_JAVA_REF }}
           path: protowire-java
 
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: "21"

@@ -19,7 +19,11 @@ env:
   # Pin the sibling Java port checkout to the tag matching this
   # module's release line. Composite-build via includeBuild needs the
   # path ../protowire-java to exist with this ref checked out.
-  PROTOWIRE_JAVA_REF: v0.70.0
+  #
+  # Temporary: this is the head of protowire-java#109, which carries the
+  # (pxf.required) with (pxf.default) check RequiredDefaultBindTest pins.
+  # Replace it with the protowire-java tag that releases that check.
+  PROTOWIRE_JAVA_REF: 3b410f03db2a251a59a456917d68ccfec1fc605e
 
 jobs:
   build:

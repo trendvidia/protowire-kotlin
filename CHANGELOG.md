@@ -11,6 +11,17 @@ format changes.
 
 ## [Unreleased]
 
+### Fixed
+
+- **A schema with `(pxf.required) = true` and `(pxf.default)` on one field
+  is refused when it is bound** ([#18]), as draft -01 now requires
+  (protowire#453). Such a schema used to bind, and a document omitting the
+  field decided what it meant. `(pxf.required) = false` beside a default
+  stays accepted. The check is protowire-java's, not this module's, so it
+  arrives with the protowire-java release that carries it.
+
+[#18]: https://github.com/trendvidia/protowire-kotlin/issues/18
+
 ## [1.0.0] — 2026-05-13
 
 First major-version cut. Lockstep with the protowire v1.0 spec

@@ -9,7 +9,7 @@ plugins {
     // vanniktech 0.36.0 requires Kotlin plugin >= 2.2.0; pin to a
     // current stable release. Drop-in compatible with the existing
     // sources (no language-mode 2 features used).
-    kotlin("jvm") version "2.4.20"
+    kotlin("jvm") version "2.4.21"
     `java-library`
     id("com.vanniktech.maven.publish") version "0.37.0"
 }

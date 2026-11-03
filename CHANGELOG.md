@@ -11,6 +11,12 @@ format changes.
 
 ## [Unreleased]
 
+## [1.4.0] — 2026-11-03
+
+Jumps from 1.0.0 to match `protowire-java`'s minor version, as the README
+promises. This is the first release a consumer can resolve from Maven Central:
+1.0.0's POM named artifacts that were never published there.
+
 ### Changed
 
 - **Built against protowire-java 1.4.0** ([#17]), up from 0.70.0. This module

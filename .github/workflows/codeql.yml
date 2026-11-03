@@ -16,7 +16,7 @@ permissions:
   security-events: write
 
 env:
-  PROTOWIRE_JAVA_REF: v0.70.0
+  PROTOWIRE_JAVA_REF: v1.4.0
 
 jobs:
   analyze:

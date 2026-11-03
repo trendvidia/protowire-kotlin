@@ -11,15 +11,31 @@ format changes.
 
 ## [Unreleased]
 
+### Changed
+
+- **Built against protowire-java 1.4.0** ([#17]), up from 0.70.0. This module
+  has no codec of its own, so everything below comes from that release. No
+  wire-format change, but some documents that decoded before now fail, and
+  PXF text changes:
+  - Refused now: a singular field or map key bound twice in one body, `null`
+    on a field without explicit presence, and a raw line feed in a simple
+    string.
+  - `pxf.BigFloat` is read and written in binary as the spec defines it. The
+    old power-of-ten form decoded to a different number in every other port.
+  - Text follows protowire-go, so golden files will differ: `1h30m0s` for a
+    Duration, `100` and `1e+21` for floats, `.5Z` for a Timestamp fraction.
+    The old forms still decode.
+
 ### Fixed
 
 - **A schema with `(pxf.required) = true` and `(pxf.default)` on one field
   is refused when it is bound** ([#18]), as draft -01 now requires
   (protowire#453). Such a schema used to bind, and a document omitting the
   field decided what it meant. `(pxf.required) = false` beside a default
-  stays accepted. The check is protowire-java's, not this module's, so it
-  arrives with the protowire-java release that carries it.
+  stays accepted. The check is protowire-java's, not this module's, and
+  arrives with the move to 1.4.0.
 
+[#17]: https://github.com/trendvidia/protowire-kotlin/issues/17
 [#18]: https://github.com/trendvidia/protowire-kotlin/issues/18
 
 ## [1.0.0] — 2026-05-13

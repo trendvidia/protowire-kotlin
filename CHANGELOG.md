@@ -31,6 +31,9 @@ format changes.
 - **The published POM resolves** ([#19]). It named `org.protowire:pxf` and its
   siblings, which were never on Maven Central. It now names
   `org.protowire:protowire-pxf` and the others, as Java publishes them.
+- **The Flow helpers compile for a consumer without their own coroutines
+  dependency.** `kotlinx-coroutines-core` was in the POM at runtime scope,
+  though `Flow` is in this module's public signatures. It is compile scope now.
 - **A schema with `(pxf.required) = true` and `(pxf.default)` on one field
   is refused when it is bound** ([#18]), as draft -01 now requires
   (protowire#453). Such a schema used to bind, and a document omitting the

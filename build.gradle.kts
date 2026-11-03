@@ -42,8 +42,9 @@ dependencies {
     api("org.protowire:protowire-sbe:1.4.0")
     api("org.protowire:protowire-envelope:1.4.0")
 
-    // Coroutines for the suspend wrappers + Flow extensions.
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
+    // Coroutines for the suspend wrappers + Flow extensions. api because
+    // Flow is in this module's public signatures.
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
 
     testImplementation(platform("org.junit:junit-bom:6.1.3"))
     testImplementation("org.junit.jupiter:junit-jupiter")

@@ -15,7 +15,43 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
+env:
+  # The spec commit the cases in src/test/resources/text/ came from, and the
+  # protowire-go commit that must reproduce their goldens. They are SHAs
+  # because no tag of either repo has the corpus or check_decode's pb-text
+  # mode yet. Replace them with tags once one does.
+  PROTOWIRE_SPEC_REF: 577f4cf696633e23bfe120e63fb8544e5ad1b658
+  PROTOWIRE_GO_REF: f8a01b1814374b8fa8d630fd1e69d7cf04b07860
+
 jobs:
+  go-goldens:
+    name: goldens match protowire-go
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          path: protowire-kotlin
+
+      - uses: actions/checkout@v7
+        with:
+          repository: trendvidia/protowire
+          ref: ${{ env.PROTOWIRE_SPEC_REF }}
+          path: protowire
+
+      - uses: actions/checkout@v7
+        with:
+          repository: trendvidia/protowire-go
+          ref: ${{ env.PROTOWIRE_GO_REF }}
+          path: protowire-go
+
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: protowire-go/go.mod
+          cache-dependency-path: protowire-go/go.sum
+
+      - name: Run protowire-go over the vendored cases
+        run: ./protowire-kotlin/scripts/check_go_goldens.sh protowire protowire-go
+
   build:
     name: build / ${{ matrix.os }}
     runs-on: ${{ matrix.os }}

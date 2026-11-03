@@ -93,6 +93,8 @@ To build against an unreleased Java checkout instead, name it:
 ./gradlew test -PprotowireJavaDir=../protowire-java
 ```
 
+`GoConformanceTest` compares this module's PXF text with goldens written by [protowire-go](https://github.com/trendvidia/protowire-go), the reference. `scripts/check_go_goldens.sh` runs in CI and checks those goldens against protowire-go itself.
+
 ## Versioning
 
 Locked in step with `protowire-java`'s minor version. The wire-format compatibility surface lives in [protowire's `STABILITY.md`](https://github.com/trendvidia/protowire/blob/main/STABILITY.md); this module's contract is "it composes with whatever Java port version is on the classpath at the same minor".

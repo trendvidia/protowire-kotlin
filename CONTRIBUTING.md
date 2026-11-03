@@ -37,18 +37,20 @@ build lint-clean.
 
 ## Local development
 
-This is a Gradle composite build that depends on a sibling
-[`protowire-java`](https://github.com/trendvidia/protowire-java)
-checkout for the underlying codec jars (see
-`settings.gradle.kts`'s `includeBuild("../protowire-java")`). Until
-the Java artifacts are published to Maven Central (tracked in
-ROADMAP 0.72.0 upstream), this is how dependent code resolves them.
+The underlying codec jars come from Maven Central, so a plain clone
+builds:
 
 ```sh
-git clone https://github.com/trendvidia/protowire-java.git ../protowire-java
-
 ./gradlew build
 ./gradlew test
+```
+
+To try a change that isn't released in
+[`protowire-java`](https://github.com/trendvidia/protowire-java) yet,
+point the build at a checkout:
+
+```sh
+./gradlew test -PprotowireJavaDir=../protowire-java
 ```
 
 ## Sending changes

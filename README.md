@@ -80,11 +80,17 @@ The Java port doesn't yet ship native streaming reads; these adapters bridge use
 
 ## Building
 
-Composite-build setup: depends on [`protowire-java`](https://github.com/trendvidia/protowire-java) checked out as a sibling at `../protowire-java/`. The `settings.gradle.kts` `includeBuild` directive resolves the Java port's modules at build time.
+The [`protowire-java`](https://github.com/trendvidia/protowire-java) modules come from Maven Central, at the version in `build.gradle.kts`.
 
 ```bash
 ./gradlew test
 ./gradlew jar
+```
+
+To build against an unreleased Java checkout instead, name it:
+
+```bash
+./gradlew test -PprotowireJavaDir=../protowire-java
 ```
 
 ## Versioning

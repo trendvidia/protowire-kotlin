@@ -11,6 +11,13 @@ format changes.
 
 ## [Unreleased]
 
+### Added
+
+- **Conformance against protowire-go.** `GoConformanceTest` holds what
+  `pxfMarshal` writes to 56 goldens byte for byte, and checks that
+  `pxfUnmarshal` reads them back. CI runs protowire-go itself to show the
+  goldens are what it writes.
+
 ## [1.4.0] — 2026-11-03
 
 Jumps from 1.0.0 to match `protowire-java`'s minor version, as the README

@@ -32,15 +32,15 @@ kotlin {
 }
 
 dependencies {
-    // Java port codecs — composite-build-resolved via includeBuild in
-    // settings.gradle.kts. Pulls in protobuf-java transitively; consumers
+    // Java port codecs, from Maven Central. Java publishes each module as
+    // protowire-<module>. Pulls in protobuf-java transitively; consumers
     // who want the lite tier should depend on the *-android Java modules
     // directly (a future :*-kotlin-android variant could mirror this
     // module's structure when there's demand).
-    api("org.protowire:pxf:1.4.0")
-    api("org.protowire:pb:1.4.0")
-    api("org.protowire:sbe:1.4.0")
-    api("org.protowire:envelope:1.4.0")
+    api("org.protowire:protowire-pxf:1.4.0")
+    api("org.protowire:protowire-pb:1.4.0")
+    api("org.protowire:protowire-sbe:1.4.0")
+    api("org.protowire:protowire-envelope:1.4.0")
 
     // Coroutines for the suspend wrappers + Flow extensions.
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")

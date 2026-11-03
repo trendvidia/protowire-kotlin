@@ -28,6 +28,9 @@ format changes.
 
 ### Fixed
 
+- **The published POM resolves** ([#19]). It named `org.protowire:pxf` and its
+  siblings, which were never on Maven Central. It now names
+  `org.protowire:protowire-pxf` and the others, as Java publishes them.
 - **A schema with `(pxf.required) = true` and `(pxf.default)` on one field
   is refused when it is bound** ([#18]), as draft -01 now requires
   (protowire#453). Such a schema used to bind, and a document omitting the
@@ -37,6 +40,7 @@ format changes.
 
 [#17]: https://github.com/trendvidia/protowire-kotlin/issues/17
 [#18]: https://github.com/trendvidia/protowire-kotlin/issues/18
+[#19]: https://github.com/trendvidia/protowire-kotlin/issues/19
 
 ## [1.0.0] — 2026-05-13
 

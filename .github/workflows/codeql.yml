@@ -27,6 +27,10 @@ jobs:
           distribution: temurin
           java-version: "21"
 
+      # Caches the Gradle distribution, which the wrapper otherwise downloads
+      # on every run.
+      - uses: gradle/actions/setup-gradle@v6
+
       - uses: github/codeql-action/init@v4
         with:
           languages: java-kotlin

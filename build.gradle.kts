@@ -4,6 +4,7 @@
 import com.vanniktech.maven.publish.JavaLibrary
 import com.vanniktech.maven.publish.JavadocJar
 import com.vanniktech.maven.publish.SourcesJar
+import java.util.zip.ZipFile
 
 plugins {
     // vanniktech 0.36.0 requires Kotlin plugin >= 2.2.0; pin to a
@@ -12,6 +13,8 @@ plugins {
     kotlin("jvm") version "2.4.21"
     `java-library`
     id("com.vanniktech.maven.publish") version "0.37.0"
+    // KDoc for the javadoc jar: javadoc itself does not read Kotlin (#32).
+    id("org.jetbrains.dokka") version "2.3.0"
 }
 
 group = "org.protowire"
@@ -61,6 +64,44 @@ tasks.test {
     }
 }
 
+// The javadoc jar must document the public API (#32). `javadoc` reads no
+// Kotlin, so the jar shipped with only a manifest until Dokka built it.
+// `build` runs `check`, in CI and before every publish, so this gates both.
+val checkJavadocJar = tasks.register("checkJavadocJar") {
+    description = "Fails unless the javadoc jar has a page for each public declaration."
+    group = "verification"
+    // The javadoc artifact the Maven publication uploads, however it is built.
+    val published = provider {
+        publishing.publications.withType<MavenPublication>().single()
+            .artifacts.single { it.classifier == "javadoc" }
+    }
+    dependsOn(published.map { it.buildDependencies })
+    val sources = fileTree("src/main/kotlin")
+    inputs.files(sources)
+    doLast {
+        val pages = ZipFile(published.get().file).use { zip ->
+            zip.entries().asSequence().associate { e -> e.name to zip.getInputStream(e).readBytes().decodeToString() }
+        }
+        // A top-level `public` fun or class, past type parameters and a receiver.
+        val decl = Regex("""^public (?:(?:suspend|inline|sealed|data|annotation) )*(fun|class) (?:<[^>]+> )?(?:[\w<>?, ]+\.)?(\w+)""")
+        // Dokka's file names: each capital letter becomes '-' and lowercase.
+        fun kebab(name: String) = name.replace(Regex("[A-Z]")) { "-" + it.value.lowercase() }
+        val dir = "protowire-kotlin/org.protowire.kotlin/"
+        val expected = sources.files.flatMap { it.readLines() }.mapNotNull { decl.find(it) }.map { m ->
+            val (kind, name) = m.destructured
+            dir + kebab(name) + if (kind == "class") "/index.html" else ".html"
+        }.toSet()
+        check(expected.size >= 20) { "found only ${expected.size} public declarations; the pattern no longer reads the sources" }
+        val missing = expected - pages.keys
+        check(missing.isEmpty()) { "javadoc jar has no page for: $missing" }
+        // pbMarshal's KDoc, so the pages carry doc comments and not just signatures.
+        val kdoc = "Suspending PB struct marshal"
+        check(pages.values.any { kdoc in it }) { "javadoc jar holds no KDoc text (looked for \"$kdoc\")" }
+        logger.lifecycle("${published.get().file.name}: ${pages.size} entries, a page for each of ${expected.size} public declarations")
+    }
+}
+tasks.named("check") { dependsOn(checkJavadocJar) }
+
 // --- Maven Central publishing ---------------------------------------------
 mavenPublishing {
     // Central Portal is the only supported Sonatype host since
@@ -73,7 +114,7 @@ mavenPublishing {
 
     configure(
         JavaLibrary(
-            javadocJar = JavadocJar.Javadoc(),
+            javadocJar = JavadocJar.Dokka("dokkaGeneratePublicationHtml"),
             sourcesJar = SourcesJar.Sources(),
         ),
     )

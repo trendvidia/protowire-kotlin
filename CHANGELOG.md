@@ -11,6 +11,14 @@ format changes.
 
 ## [Unreleased]
 
+### Fixed
+
+- **The javadoc jar holds the API docs** ([#32]). It used to hold only a
+  manifest, because `javadoc` reads no Kotlin, so javadoc.io and IDEs showed
+  nothing for this module. Dokka now builds it from the KDoc. `./gradlew build`
+  fails if the jar the publication uploads lacks a page for any public
+  declaration.
+
 ## [2.0.0] — 2026-11-11
 
 Jumps from 1.4.0 to match `protowire-java` 2.0, as the README promises. It is
@@ -100,6 +108,7 @@ promises. This is the first release a consumer can resolve from Maven Central:
 [protowire-java#187]: https://github.com/trendvidia/protowire-java/issues/187
 [#17]: https://github.com/trendvidia/protowire-kotlin/issues/17
 [#30]: https://github.com/trendvidia/protowire-kotlin/issues/30
+[#32]: https://github.com/trendvidia/protowire-kotlin/issues/32
 [#18]: https://github.com/trendvidia/protowire-kotlin/issues/18
 [#19]: https://github.com/trendvidia/protowire-kotlin/issues/19
 

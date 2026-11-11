@@ -4,6 +4,7 @@ package org.protowire.kotlin
 
 import com.google.protobuf.ByteString
 import org.junit.jupiter.api.Test
+import org.protowire.envelope.v1.FieldError
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -49,6 +50,19 @@ class EnvelopeBuildersTest {
         }
         assertEquals("X", ae.code)
         assertEquals(listOf("a", "b"), ae.argsList)
+    }
+
+    @Test
+    fun `fieldError DSL standalone`() {
+        val fe = fieldError {
+            field = "amount"
+            code = "MIN_VALUE"
+            message = "below minimum"
+            args += "10"
+        }
+        val want = FieldError.newBuilder().setField("amount").setCode("MIN_VALUE")
+            .setMessage("below minimum").addArgs("10").build()
+        assertEquals(want, fe)
     }
 
     @Test

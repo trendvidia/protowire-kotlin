@@ -11,6 +11,12 @@ format changes.
 
 ## [Unreleased]
 
+## [2.0.1] — 2026-11-11
+
+Ships the API docs in the javadoc jar. No Kotlin source change and no
+dependency change: still built on `protowire-java` 2.0.1, and the POM differs
+from 2.0.0's only in its version.
+
 ### Fixed
 
 - **The javadoc jar holds the API docs** ([#32]). It used to hold only a

@@ -37,10 +37,10 @@ dependencies {
     // who want the lite tier should depend on the *-android Java modules
     // directly (a future :*-kotlin-android variant could mirror this
     // module's structure when there's demand).
-    api("org.protowire:protowire-pxf:1.4.0")
-    api("org.protowire:protowire-pb:1.4.0")
-    api("org.protowire:protowire-sbe:1.4.0")
-    api("org.protowire:protowire-envelope:1.4.0")
+    api("org.protowire:protowire-pxf:2.0.1")
+    api("org.protowire:protowire-pb:2.0.1")
+    api("org.protowire:protowire-sbe:2.0.1")
+    api("org.protowire:protowire-envelope:2.0.1")
 
     // Coroutines for the suspend wrappers + Flow extensions. api because
     // Flow is in this module's public signatures.

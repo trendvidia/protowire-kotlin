@@ -73,4 +73,15 @@ class PxfExtensionsTest {
         assertEquals("ok 7", okMsg)
         assertEquals(true, errMsg.startsWith("fail "))
     }
+
+    @Test
+    fun `getOrNull and getOrElse take both branches`() = runTest {
+        val ok = pxfUnmarshalFull("status = 7\n".toByteArray(), Envelope.newBuilder())
+        val bad = pxfUnmarshalFull("garbage".toByteArray(), Envelope.newBuilder())
+
+        assertEquals(7, ok.getOrNull()?.status)
+        assertEquals(null, bad.getOrNull())
+        assertEquals(7, ok.getOrElse { Envelope.newBuilder().setStatus(-1) }.status)
+        assertEquals(-1, bad.getOrElse { Envelope.newBuilder().setStatus(-1) }.status)
+    }
 }

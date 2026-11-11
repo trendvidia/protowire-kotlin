@@ -65,7 +65,7 @@ class GoConformanceTest {
     }
 
     private companion object {
-        const val CASES = 56
+        const val CASES = 60
 
         /**
          * The same value comes back in another stored form, as it does from

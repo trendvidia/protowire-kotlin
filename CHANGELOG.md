@@ -14,9 +14,40 @@ format changes.
 ### Added
 
 - **Conformance against protowire-go.** `GoConformanceTest` holds what
-  `pxfMarshal` writes to 56 goldens byte for byte, and checks that
-  `pxfUnmarshal` reads them back. CI runs protowire-go itself to show the
-  goldens are what it writes.
+  `pxfMarshal` writes to 60 goldens byte for byte, and checks that
+  `pxfUnmarshal` reads them back. CI runs protowire-go v1.17.0 itself to show
+  the goldens are what it writes.
+
+### Changed
+
+- **Built against protowire-java 2.0.1**, up from 1.4.0. Java now matches
+  protowire-go v1.17.0. This module has no codec of its own, so everything
+  below comes from that release. No wire-format change.
+  - **protobuf-java 4 is required** (4.36.2 or later), up from 3.25.5. It comes
+    in through this module's `api` dependencies, so a consumer that pins
+    protobuf-java 3 has to move.
+  - `pxfMarshal` refuses an unset `optional` field marked `(pxf.required)`,
+    with protowire-go's text. It used to write a document that the full decode
+    refuses.
+  - Some documents parse as protowire-go parses them. URL-safe base64 in
+    `b"…"` is accepted. Timestamps follow Go's RFC 3339, so `+02`, a missing
+    second, and a lowercase `t` or `z` are refused. A precision suffix on a
+    map key is refused.
+  - `null` on an editions field with explicit presence leaves it unset. It
+    used to be refused.
+  - SBE refuses a value its primitive cannot hold. It used to truncate:
+    `int32` 300 written as `int8` came out as 44. A message encoded with
+    another schema's id is refused.
+
+### Fixed
+
+- **`pxfMarshal` writes an unset field with `(pxf.default)` or `(pxf.required)`
+  so that it reads back** ([protowire-java#187]). It used to leave the field
+  out. A reader then applied the default to a stored zero, or refused the
+  document because a required field was missing. Now such a field is written
+  as its zero value (`n = 0`, `rl = []`, `rm = {}`), or `null` for a
+  message-typed field with a default, as protowire-go writes it. The spec's
+  four `Annotated` text cases hold this; three of them fail on 1.4.0.
 
 ## [1.4.0] — 2026-11-03
 
@@ -54,6 +85,7 @@ promises. This is the first release a consumer can resolve from Maven Central:
   stays accepted. The check is protowire-java's, not this module's, and
   arrives with the move to 1.4.0.
 
+[protowire-java#187]: https://github.com/trendvidia/protowire-java/issues/187
 [#17]: https://github.com/trendvidia/protowire-kotlin/issues/17
 [#18]: https://github.com/trendvidia/protowire-kotlin/issues/18
 [#19]: https://github.com/trendvidia/protowire-kotlin/issues/19

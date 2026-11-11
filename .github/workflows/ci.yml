@@ -17,11 +17,11 @@ concurrency:
 
 env:
   # The spec commit the cases in src/test/resources/text/ came from, and the
-  # protowire-go commit that must reproduce their goldens. They are SHAs
-  # because no tag of either repo has the corpus or check_decode's pb-text
-  # mode yet. Replace them with tags once one does.
-  PROTOWIRE_SPEC_REF: 577f4cf696633e23bfe120e63fb8544e5ad1b658
-  PROTOWIRE_GO_REF: f8a01b1814374b8fa8d630fd1e69d7cf04b07860
+  # protowire-go release that must reproduce their goldens. The spec ref is a
+  # SHA because no spec tag has testdata/text/ yet (v1.16.0 predates it).
+  # Replace it with a tag once one does.
+  PROTOWIRE_SPEC_REF: b021d24c1f8e5c2464aa15911b28dc8b59ffa083
+  PROTOWIRE_GO_REF: v1.17.0
 
 jobs:
   go-goldens:

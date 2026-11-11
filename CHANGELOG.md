@@ -14,9 +14,9 @@ format changes.
 ### Added
 
 - **Conformance against protowire-go.** `GoConformanceTest` holds what
-  `pxfMarshal` writes to 56 goldens byte for byte, and checks that
-  `pxfUnmarshal` reads them back. CI runs protowire-go itself to show the
-  goldens are what it writes.
+  `pxfMarshal` writes to 60 goldens byte for byte, and checks that
+  `pxfUnmarshal` reads them back. CI runs protowire-go v1.17.0 itself to show
+  the goldens are what it writes.
 
 ### Changed
 
@@ -38,6 +38,16 @@ format changes.
   - SBE refuses a value its primitive cannot hold. It used to truncate:
     `int32` 300 written as `int8` came out as 44. A message encoded with
     another schema's id is refused.
+
+### Fixed
+
+- **`pxfMarshal` writes an unset field with `(pxf.default)` or `(pxf.required)`
+  so that it reads back** ([protowire-java#187]). It used to leave the field
+  out. A reader then applied the default to a stored zero, or refused the
+  document because a required field was missing. Now such a field is written
+  as its zero value (`n = 0`, `rl = []`, `rm = {}`), or `null` for a
+  message-typed field with a default, as protowire-go writes it. The spec's
+  four `Annotated` text cases hold this; three of them fail on 1.4.0.
 
 ## [1.4.0] — 2026-11-03
 

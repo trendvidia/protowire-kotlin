@@ -76,7 +76,55 @@ sourceBytes                                     // : Flow<ByteArray>
     .collect { handle(it) }
 ```
 
-The Java port doesn't yet ship native streaming reads; these adapters bridge user-segmented byte streams (Kafka records, Postgres `LISTEN` notifications, file-segment iterators) into typed pipelines.
+These adapters work on messages you have already split apart, such as Kafka records, Postgres `LISTEN` notifications, or file segments. To read a stream the Java port frames itself, see the next section.
+
+## Calling the Java API directly
+
+The wrappers above always use the Java defaults. Everything else in the Java port is called from Kotlin as plain Java. The Java modules are `api` dependencies, so they are already on your classpath. These calls block, so run them on `Dispatchers.IO` yourself:
+
+| To get | Call from Java |
+|---|---|
+| PXF decode options: limits, `discardUnknown`, `skipValidate`, a type resolver, `onSecretField`, a validator | `UnmarshalOptions.defaults().with…()`, then `.unmarshal(…)` or `.unmarshalFull(…)` |
+| PXF encode options: indent, `emitDefaults`, type URL, null fields, nesting depth | `MarshalOptions.defaults().with…()`, then `.marshal(…)` |
+| PB options | `Pb.marshal(obj, MarshalOptions)`, `Pb.unmarshal(…, UnmarshalOptions)` |
+| SBE limits or a validator | `codec.withLimits(…)` / `codec.withValidator(…)`. The result is still a `Codec`, so the suspending extensions work on it. |
+| `@dataset` streams | read with `DatasetReader`, write with `Pxf.appendDatasetHeader` / `appendDatasetRow` |
+| Framed PB streams | `org.protowire.pb.Decoder` / `Encoder` |
+| Framed SBE streams (SOFH) | `codec.newDecoder(…)` / `codec.newEncoder(…)` |
+| Envelope streams | `org.protowire.envelope.Decoder` / `Encoder` |
+| Editor tooling | `Pxf.parse`, `Pxf.parseTolerant`, `Pxf.formatDocument`, `Pxf.keyedDiagnostics`, `Rewriter` |
+
+For options, wrap the call:
+
+```kotlin
+val opts = UnmarshalOptions.defaults()
+    .withLimits(DecodeLimits.defaults().withMaxMessageSize(1 shl 20))
+val msg = withContext(Dispatchers.IO) { opts.unmarshal(bytes, descriptor) }
+```
+
+For a stream, build the `Flow` yourself. The readers don't close their `InputStream`, so the flow does:
+
+```kotlin
+fun envelopes(input: InputStream): Flow<Envelope> = flow {
+    input.use {
+        val decoder = org.protowire.envelope.Decoder(it)
+        while (true) emit(decoder.decode() ?: break)    // null at the end of the stream
+    }
+}.flowOn(Dispatchers.IO)
+
+fun rows(input: InputStream): Flow<MyRow> = flow {
+    input.use {
+        val reader = DatasetReader(it)
+        while (true) {
+            val row = MyRow.newBuilder()
+            if (!reader.scan(row)) break
+            emit(row.build())
+        }
+    }
+}.flowOn(Dispatchers.IO)
+```
+
+`JavaOnlyApisTest` runs these examples, so a rename in protowire-java breaks the build before it breaks this page.
 
 ## Building
 

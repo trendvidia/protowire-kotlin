@@ -17,6 +17,11 @@ format changes.
   `pxfMarshal` writes to 60 goldens byte for byte, and checks that
   `pxfUnmarshal` reads them back. CI runs protowire-go v1.17.0 itself to show
   the goldens are what it writes.
+- **The README says what to call from Java directly** ([#30]). The wrappers
+  use Java's defaults and adapt no stream reader. Codec options, framed
+  PB, SBE and envelope streams, `@dataset` and the editor tooling are called
+  as plain Java. The README shows how to wrap them, and `JavaOnlyApisTest`
+  runs those examples.
 
 ### Changed
 
@@ -87,6 +92,7 @@ promises. This is the first release a consumer can resolve from Maven Central:
 
 [protowire-java#187]: https://github.com/trendvidia/protowire-java/issues/187
 [#17]: https://github.com/trendvidia/protowire-kotlin/issues/17
+[#30]: https://github.com/trendvidia/protowire-kotlin/issues/30
 [#18]: https://github.com/trendvidia/protowire-kotlin/issues/18
 [#19]: https://github.com/trendvidia/protowire-kotlin/issues/19
 

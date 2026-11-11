@@ -11,6 +11,13 @@ format changes.
 
 ## [Unreleased]
 
+## [2.0.0] — 2026-11-11
+
+Jumps from 1.4.0 to match `protowire-java` 2.0, as the README promises. It is
+a major release because consumers need protobuf-java 4, which this module's
+`api` dependencies bring in. No Kotlin source changes and no wire-format change.
+A Kotlin caller now gets protowire-go v1.17.0's behaviour, through Java 2.0.1.
+
 ### Added
 
 - **Conformance against protowire-go.** `GoConformanceTest` holds what
